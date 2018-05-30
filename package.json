@@ -16,7 +16,7 @@
   "dependencies": {
     "arraydiff": "^0.1.1",
     "deep-is": "^0.1.3",
-    "sharedb": "^1.0.0-beta",
+    "sharedb": "^1.0.0-lever",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
