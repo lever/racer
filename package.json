@@ -8,10 +8,14 @@
   },
   "version": "0.9.3",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "test": "node_modules/.bin/mocha && npm run lint",
-    "test-cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha && npm run lint"
+    "test": "node_modules/.bin/mocha test build/test && npm run lint",
+    "test-cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha test build/test && npm run lint",
+    "clean": "gts clean",
+    "compile": "tsc -p . ; $(test -L build/lib || ln -sn ../lib build/lib)",
+    "pretest": "npm run compile"
   },
   "dependencies": {
     "arraydiff": "^0.1.1",
@@ -20,12 +24,16 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
+    "@types/expect.js": "^0.3.29",
+    "@types/mocha": "^2.2.48",
     "coveralls": "^2.11.8",
     "eslint": "^2.9.0",
     "eslint-config-xo": "^0.14.1",
     "expect.js": "^0.3.1",
+    "gts": "^0.9.0",
     "istanbul": "^0.4.2",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "typescript": "^3.4.1"
   },
   "bugs": {
     "url": "https://github.com/derbyjs/racer/issues"
