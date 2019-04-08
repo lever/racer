@@ -221,6 +221,45 @@ declare namespace racer {
     del(cb?: (error?: Error) => void): T | undefined;
 
     /**
+     * Increments the value at this model's path or a relative subpath.
+     *
+     * If a callback is provided, it's called when the write is finished.
+     *
+     * @param byNumber amount to increment/decrement. Defaults to `1`.
+     * @returns the new number at the path
+     */
+    increment<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        K4 extends DataPropNames<T[K1][K2][K3]>,
+        N extends number & T[K1][K2][K3][K4],
+      >(subpath: [K1, K2, K3, K4], byNumber?: N, cb?: (error?: Error) => void):
+      number;
+    increment<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        N extends number & T[K1][K2][K3],
+      >(subpath: [K1, K2, K3], byNumber?: N, cb?: (error?: Error) => void):
+      number;
+    increment<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        N extends number & T[K1][K2],
+      >(subpath: [K1, K2], byNumber?: N, cb?: (error?: Error) => void):
+      number;
+    increment<
+        K1 extends DataPropNames<T>,
+        N extends number & T[K1],
+      >(subpath: [K1], byNumber?: N, cb?: (error?: Error) => void):
+      number;
+    increment<
+        N extends number & T
+      >(byNumber?: N, cb?: (error?: Error) => void):
+      number;
+
+    /**
      * Sets the value at this model's path or a relative subpath.
      *
      * If a callback is provided, it's called when the write is finished.

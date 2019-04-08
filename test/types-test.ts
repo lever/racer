@@ -5,9 +5,9 @@ import racer = require('../lib');
 import {Model, RootModel, CollectionData} from '../lib';
 
 interface Book {
-  author: Author;
+  author?: Author;
   pages: Page[];
-  publishedAt: number;
+  publishedAt?: number;
 }
 
 interface Author {
@@ -42,6 +42,10 @@ describe('TypeScript Model', function() {
     });
     rootModel = backend.createModel();
   });
+
+  //
+  // Getters
+  //
 
   describe('get', function() {
     let book1: Book;
@@ -112,6 +116,57 @@ describe('TypeScript Model', function() {
         const nonExistent = bookModel.get(['pages', 12]);
         expect(nonExistent).to.be(undefined);
       });
+    });
+  });
+
+  //
+  // Mutators
+  //
+
+  describe('add', function() {
+    let book1: Book;
+    let book1Id: string;
+    let book1Model: Model<Book>;
+    beforeEach(function() {
+      book1 = {
+        pages: [],
+        publishedAt: 100,
+      };
+      book1Id = rootModel.add('books', book1);
+      book1Model = rootModel.at(['books', book1Id]);
+    });
+
+    it('with no arguments - increments model value by 1', function() {
+      const publishedAtModel = book1Model.at(['publishedAt']);
+      const returnValue = publishedAtModel.increment();
+      expect(returnValue).to.equal(101);
+      expect(book1Model.get()).to.have.property('publishedAt', 101);
+    });
+
+    it('with positive number argument - increments model value by that number', function() {
+      const publishedAtModel = book1Model.at(['publishedAt']);
+      const returnValue = publishedAtModel.increment(25);
+      expect(returnValue).to.equal(125);
+      expect(book1Model.get()).to.have.property('publishedAt', 125);
+    });
+
+    it('with negative number argument - decrements model value by that number', function() {
+      const publishedAtModel = book1Model.at(['publishedAt']);
+      const returnValue = publishedAtModel.increment(-25);
+      expect(returnValue).to.equal(75);
+      expect(book1Model.get()).to.have.property('publishedAt', 75);
+    });
+
+    it('with subpath argument - increments model value by 1', function() {
+      const returnValue = rootModel.increment(['books', book1Id, 'publishedAt']);
+      expect(returnValue).to.equal(101);
+      expect(book1Model.get()).to.have.property('publishedAt', 101);
+    });
+
+    it('with subpath and number arguments - increments model value by that number', function() {
+      const returnValue = rootModel.increment(['books', book1Id, 'publishedAt'], 25);
+      expect(returnValue).to.equal(125);
+      expect(book1Model.get()).to.have.property('publishedAt', 125);
     });
   });
 });
