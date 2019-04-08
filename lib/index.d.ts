@@ -488,12 +488,13 @@ declare namespace racer {
   export type UUID = string;
   export type PathSegment = string | number;
 
-  // Workaround for recursive types, suggested by TypeScript's lead architect:
-  // https://github.com/Microsoft/TypeScript/issues/3496#issuecomment-128553540
   type JSONValue = string | number | boolean | null | JSONObject | JSONArray;
   type JSONObject = {
     [propName: string]: JSONValue;
-  };
+    // Union with `object` below is a workaround to allow interfaces to work,
+    // since interfaces don't work with the index signature above, but types do:
+    // https://github.com/Microsoft/TypeScript/issues/15300
+  } | object;
   interface JSONArray extends Array<JSONValue> { }
 
   type DataPropNames<T> =
@@ -502,6 +503,8 @@ declare namespace racer {
 
   type ArrayItemType<T> = T extends Array<infer U> ? U : never;
 
+  // Workaround for recursive types, suggested by TypeScript's lead architect:
+  // https://github.com/Microsoft/TypeScript/issues/3496#issuecomment-128553540
   type ReadonlyDeep<T> =
     T extends Array<infer U> ? ReadonlyArrayDeep<U> :
     { readonly [K in keyof T]: ReadonlyDeep<T[K]> };

@@ -4,17 +4,18 @@ import expect = require('expect.js');
 import racer = require('../lib');
 import {Model, RootModel, CollectionData} from '../lib';
 
-type Book = {
+interface Book {
   author: Author;
   pages: Page[];
   publishedAt: number;
-};
+}
 
-type Author = {
+interface Author {
   id: string;
   name: string;
-};
+}
 
+// Make sure both interfaces and types work as Model generic types.
 type Page = {
   text: string;
 };
