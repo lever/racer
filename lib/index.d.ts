@@ -260,6 +260,128 @@ declare namespace racer {
       number;
 
     /**
+     * Inserts one or more items at an index for the array at the path or
+     * relative subpath.
+     *
+     * If a callback is provided, it's called when the write is finished.
+     *
+     * @param index 0-based index at which to insert the new items
+     * @param values new item or items to insert
+     * @returns the new length of the array
+     */
+    insert<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        K4 extends DataPropNames<T[K1][K2][K3]>,
+        V extends ArrayItemType<T[K1][K2][K3][K4]>,
+      >(subpath: [K1, K2, K3, K4], index: number, values: V | V[], cb?: (error?: Error) => void):
+      number;
+    insert<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        V extends ArrayItemType<T[K1][K2][K3]>,
+      >(subpath: [K1, K2, K3], index: number, values: V | V[], cb?: (error?: Error) => void):
+      number;
+    insert<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        V extends ArrayItemType<T[K1][K2]>,
+      >(subpath: [K1, K2], index: number, values: V | V[], cb?: (error?: Error) => void):
+      number;
+    insert<
+        K1 extends DataPropNames<T>,
+        V extends ArrayItemType<T[K1]>,
+      >(subpath: [K1], index: number, values: V | V[], cb?: (error?: Error) => void):
+      number;
+    insert<
+        V extends ArrayItemType<T>
+      >(index: number, values: V | V[], cb?: (error?: Error) => void):
+      number;
+
+    /**
+     * Adds an item to the end of the array at this model's path or a relative
+     * subpath. If there's currently no value at the path, a new array is
+     * automatically set to the path first.
+     *
+     * If a callback is provided, it's called when the write is finished.
+     *
+     * @returns the new length of the array
+     */
+    push<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        K4 extends DataPropNames<T[K1][K2][K3]>,
+        V extends ArrayItemType<T[K1][K2][K3][K4]>,
+      >(subpath: [K1, K2, K3, K4], item: V, cb?: (error?: Error) => void):
+      number;
+    push<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        V extends ArrayItemType<T[K1][K2][K3]>,
+      >(subpath: [K1, K2, K3], item: V, cb?: (error?: Error) => void):
+      number;
+    push<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        V extends ArrayItemType<T[K1][K2]>,
+      >(subpath: [K1, K2], item: V, cb?: (error?: Error) => void):
+      number;
+    push<
+        K1 extends DataPropNames<T>,
+        V extends ArrayItemType<T[K1]>,
+      >(subpath: [K1], item: V, cb?: (error?: Error) => void):
+      number;
+    push<
+        V extends ArrayItemType<T>
+      >(item: V, cb?: (error?: Error) => void):
+      number;
+
+    /**
+     * Removes one or more items from the array at this model's path or a
+     * relative subpath.
+     *
+     * If a callback is provided, it's called when the write is finished.
+     *
+     * @param index 0-based index at which to start removing items
+     * @param howMany number of items to remove, defaults to `1`
+     * @returns array of the removed items
+     */
+    remove<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        K4 extends DataPropNames<T[K1][K2][K3]>,
+        V extends ArrayItemType<T[K1][K2][K3][K4]>,
+      >(subpath: [K1, K2, K3, K4], index: number, howMany?: number, cb?: (error?: Error) => void):
+      V[];
+    remove<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        K3 extends DataPropNames<T[K1][K2]>,
+        V extends ArrayItemType<T[K1][K2][K3]>,
+      >(subpath: [K1, K2, K3], index: number, howMany?: number, cb?: (error?: Error) => void):
+      V[];
+    remove<
+        K1 extends DataPropNames<T>,
+        K2 extends DataPropNames<T[K1]>,
+        V extends ArrayItemType<T[K1][K2]>,
+      >(subpath: [K1, K2], index: number, howMany?: number, cb?: (error?: Error) => void):
+      V[];
+    remove<
+        K1 extends DataPropNames<T>,
+        V extends ArrayItemType<T[K1]>,
+      >(subpath: [K1], index: number, howMany?: number, cb?: (error?: Error) => void):
+      V[];
+    remove<
+        V extends ArrayItemType<T>
+      >(index: number, howMany?: number, cb?: (error?: Error) => void):
+      V[];
+
+    /**
      * Sets the value at this model's path or a relative subpath.
      *
      * If a callback is provided, it's called when the write is finished.
@@ -536,10 +658,12 @@ declare namespace racer {
   } | object;
   interface JSONArray extends Array<JSONValue> { }
 
+  /** Extracts the property names of `T` that are valid for use in a model. */
   type DataPropNames<T> =
     T extends Array<infer _> ? (keyof T) & (number | 'length') :
     { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
 
+  /** If `T` is an array, produces the type of the array items. */
   type ArrayItemType<T> = T extends Array<infer U> ? U : never;
 
   // Workaround for recursive types, suggested by TypeScript's lead architect:

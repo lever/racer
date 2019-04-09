@@ -123,7 +123,7 @@ describe('TypeScript Model', function() {
   // Mutators
   //
 
-  describe('add', function() {
+  describe('increment', function() {
     let book1: Book;
     let book1Id: string;
     let book1Model: Model<Book>;
@@ -167,6 +167,140 @@ describe('TypeScript Model', function() {
       const returnValue = rootModel.increment(['books', book1Id, 'publishedAt'], 25);
       expect(returnValue).to.equal(125);
       expect(book1Model.get()).to.have.property('publishedAt', 125);
+    });
+  });
+
+  describe('push', function() {
+    let book: Book;
+    let bookId: string;
+    let bookModel: Model<Book>;
+    beforeEach(function() {
+      book = {
+        pages: [],
+      };
+      bookId = rootModel.add('books', book);
+      bookModel = rootModel.at(['books', bookId]);
+    });
+
+    it('onto pre-existing array', function() {
+      const pagesModel = bookModel.at(['pages']);
+      const returnValue1 = pagesModel.push({text: 'Page 1'});
+      expect(returnValue1).to.equal(1);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+      ]);
+      const returnValue2 = pagesModel.push({text: 'Page 2'});
+      expect(returnValue2).to.equal(2);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 2'},
+      ]);
+    });
+
+    it('onto path with no value will first set a new array', function() {
+      bookModel.del(['pages']);
+      expect(bookModel.get()).to.not.have.property('pages');
+
+      const returnValue = bookModel.push(['pages'], {text: 'Page 1'});
+      expect(returnValue).to.equal(1);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+      ]);
+    });
+  });
+
+  describe('insert', function() {
+    let book: Book;
+    let bookId: string;
+    let bookModel: Model<Book>;
+    let pagesModel: Model<Page[]>;
+    beforeEach(function() {
+      book = {
+        pages: [],
+      };
+      bookId = rootModel.add('books', book);
+      bookModel = rootModel.at(['books', bookId]);
+      pagesModel = bookModel.at(['pages']);
+    });
+
+    it('with single new item', function() {
+      const returnValue1 = pagesModel.insert(0, {text: 'Page 3'});
+      expect(returnValue1).to.equal(1);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 3'},
+      ]);
+      const returnValue2 = pagesModel.insert(0, {text: 'Page 1'});
+      expect(returnValue2).to.equal(2);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 3'},
+      ]);
+      const returnValue3 = pagesModel.insert(1, {text: 'Page 2'});
+      expect(returnValue3).to.equal(3);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 2'},
+        {text: 'Page 3'},
+      ]);
+    });
+
+    it('with array of new items', function() {
+      const returnValue1 = pagesModel.insert(0, [{text: 'Page 3'}]);
+      expect(returnValue1).to.equal(1);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 3'},
+      ]);
+      const returnValue2 = pagesModel.insert(0, [{text: 'Page 1'}, {text: 'Page 2'}]);
+      expect(returnValue2).to.equal(3);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 2'},
+        {text: 'Page 3'},
+      ]);
+      const returnValue3 = pagesModel.insert(2, [{text: 'Page 2.1'}, {text: 'Page 2.2'}]);
+      expect(returnValue3).to.equal(5);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 2'},
+        {text: 'Page 2.1'},
+        {text: 'Page 2.2'},
+        {text: 'Page 3'},
+      ]);
+    });
+  });
+
+  describe('remove', function() {
+    let book: Book;
+    let bookId: string;
+    let bookModel: Model<Book>;
+    let pagesModel: Model<Page[]>;
+    beforeEach(function() {
+      book = {
+        pages: [],
+      };
+      bookId = rootModel.add('books', book);
+      bookModel = rootModel.at(['books', bookId]);
+      pagesModel = bookModel.at(['pages']);
+      pagesModel.set([{text: 'Page 1'}, {text: 'Page 2'}, {text: 'Page 3'}]);
+    });
+
+    it('default of one item', function() {
+      const removedItems = pagesModel.remove(1);
+      expect(removedItems).to.eql([{text: 'Page 2'}]);
+      expect(bookModel.get()).to.have.property('pages').eql([
+        {text: 'Page 1'},
+        {text: 'Page 3'},
+      ]);
+    });
+
+    it('three items', function() {
+      const removedItems = pagesModel.remove(0, 3);
+      expect(removedItems).to.eql([
+        {text: 'Page 1'},
+        {text: 'Page 2'},
+        {text: 'Page 3'},
+      ]);
+      expect(bookModel.get()).to.have.property('pages').eql([]);
     });
   });
 });
