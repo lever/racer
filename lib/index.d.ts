@@ -232,29 +232,32 @@ declare namespace racer {
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
         K3 extends DataPropNames<T[K1][K2]>,
-        K4 extends DataPropNames<T[K1][K2][K3]>,
+        K4 extends NumberPropNames<T[K1][K2][K3]>,
         N extends number & T[K1][K2][K3][K4],
       >(subpath: [K1, K2, K3, K4], byNumber?: N, cb?: (error?: Error) => void):
       number;
     increment<
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
-        K3 extends DataPropNames<T[K1][K2]>,
+        K3 extends NumberPropNames<T[K1][K2]>,
         N extends number & T[K1][K2][K3],
       >(subpath: [K1, K2, K3], byNumber?: N, cb?: (error?: Error) => void):
       number;
     increment<
         K1 extends DataPropNames<T>,
-        K2 extends DataPropNames<T[K1]>,
+        K2 extends NumberPropNames<T[K1]>,
         N extends number & T[K1][K2],
       >(subpath: [K1, K2], byNumber?: N, cb?: (error?: Error) => void):
       number;
     increment<
-        K1 extends DataPropNames<T>,
+        K1 extends NumberPropNames<T>,
         N extends number & T[K1],
       >(subpath: [K1], byNumber?: N, cb?: (error?: Error) => void):
       number;
     increment<
+        // Calling `increment()` with no arguments on a model pointing to a
+        // non-number results in `N` being `never`, but it still compiles. Is
+        // there a way to disallow that?
         N extends number & T
       >(byNumber?: N, cb?: (error?: Error) => void):
       number;
@@ -273,25 +276,25 @@ declare namespace racer {
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
         K3 extends DataPropNames<T[K1][K2]>,
-        K4 extends DataPropNames<T[K1][K2][K3]>,
+        K4 extends ArrayPropNames<T[K1][K2][K3]>,
         V extends ArrayItemType<T[K1][K2][K3][K4]>,
       >(subpath: [K1, K2, K3, K4], index: number, values: V | V[], cb?: (error?: Error) => void):
       number;
     insert<
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
-        K3 extends DataPropNames<T[K1][K2]>,
+        K3 extends ArrayPropNames<T[K1][K2]>,
         V extends ArrayItemType<T[K1][K2][K3]>,
       >(subpath: [K1, K2, K3], index: number, values: V | V[], cb?: (error?: Error) => void):
       number;
     insert<
         K1 extends DataPropNames<T>,
-        K2 extends DataPropNames<T[K1]>,
+        K2 extends ArrayPropNames<T[K1]>,
         V extends ArrayItemType<T[K1][K2]>,
       >(subpath: [K1, K2], index: number, values: V | V[], cb?: (error?: Error) => void):
       number;
     insert<
-        K1 extends DataPropNames<T>,
+        K1 extends ArrayPropNames<T>,
         V extends ArrayItemType<T[K1]>,
       >(subpath: [K1], index: number, values: V | V[], cb?: (error?: Error) => void):
       number;
@@ -313,25 +316,25 @@ declare namespace racer {
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
         K3 extends DataPropNames<T[K1][K2]>,
-        K4 extends DataPropNames<T[K1][K2][K3]>,
+        K4 extends ArrayPropNames<T[K1][K2][K3]>,
         V extends ArrayItemType<T[K1][K2][K3][K4]>,
       >(subpath: [K1, K2, K3, K4], item: V, cb?: (error?: Error) => void):
       number;
     push<
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
-        K3 extends DataPropNames<T[K1][K2]>,
+        K3 extends ArrayPropNames<T[K1][K2]>,
         V extends ArrayItemType<T[K1][K2][K3]>,
       >(subpath: [K1, K2, K3], item: V, cb?: (error?: Error) => void):
       number;
     push<
         K1 extends DataPropNames<T>,
-        K2 extends DataPropNames<T[K1]>,
+        K2 extends ArrayPropNames<T[K1]>,
         V extends ArrayItemType<T[K1][K2]>,
       >(subpath: [K1, K2], item: V, cb?: (error?: Error) => void):
       number;
     push<
-        K1 extends DataPropNames<T>,
+        K1 extends ArrayPropNames<T>,
         V extends ArrayItemType<T[K1]>,
       >(subpath: [K1], item: V, cb?: (error?: Error) => void):
       number;
@@ -354,29 +357,32 @@ declare namespace racer {
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
         K3 extends DataPropNames<T[K1][K2]>,
-        K4 extends DataPropNames<T[K1][K2][K3]>,
+        K4 extends ArrayPropNames<T[K1][K2][K3]>,
         V extends ArrayItemType<T[K1][K2][K3][K4]>,
       >(subpath: [K1, K2, K3, K4], index: number, howMany?: number, cb?: (error?: Error) => void):
       V[];
     remove<
         K1 extends DataPropNames<T>,
         K2 extends DataPropNames<T[K1]>,
-        K3 extends DataPropNames<T[K1][K2]>,
+        K3 extends ArrayPropNames<T[K1][K2]>,
         V extends ArrayItemType<T[K1][K2][K3]>,
       >(subpath: [K1, K2, K3], index: number, howMany?: number, cb?: (error?: Error) => void):
       V[];
     remove<
         K1 extends DataPropNames<T>,
-        K2 extends DataPropNames<T[K1]>,
+        K2 extends ArrayPropNames<T[K1]>,
         V extends ArrayItemType<T[K1][K2]>,
       >(subpath: [K1, K2], index: number, howMany?: number, cb?: (error?: Error) => void):
       V[];
     remove<
-        K1 extends DataPropNames<T>,
+        K1 extends ArrayPropNames<T>,
         V extends ArrayItemType<T[K1]>,
       >(subpath: [K1], index: number, howMany?: number, cb?: (error?: Error) => void):
       V[];
     remove<
+        // Calling `remove(n)` with one argument on a model pointing to a
+        // non-array results in `N` being `never`, but it still compiles. Is
+        // there a way to disallow that?
         V extends ArrayItemType<T>
       >(index: number, howMany?: number, cb?: (error?: Error) => void):
       V[];
@@ -660,8 +666,22 @@ declare namespace racer {
 
   /** Extracts the property names of `T` that are valid for use in a model. */
   type DataPropNames<T> =
-    T extends Array<infer _> ? (keyof T) & (number | 'length') :
-    { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
+    T extends Array<infer _V> ? (keyof T) & (number | 'length') :
+    {
+      [K in keyof T]: T[K] extends Function ? never : K
+    }[keyof T];
+
+  /** Extracts the property names of `T` whose values are arrays. */
+  export type ArrayPropNames<T> = Exclude<{
+    // The `undefined`s allow this to handle optional properties.
+    [K in keyof T]: T[K] extends Array<infer _V> | undefined ? K : never
+  }[keyof T], undefined>;
+
+  /** Extracts the property names of `T` whose values are numbers. */
+  export type NumberPropNames<T> = Exclude<{
+    // The `undefined`s allow this to handle optional properties.
+    [K in keyof T]: T[K] extends number | undefined ? K : never
+  }[keyof T], undefined>;
 
   /** If `T` is an array, produces the type of the array items. */
   type ArrayItemType<T> = T extends Array<infer U> ? U : never;
