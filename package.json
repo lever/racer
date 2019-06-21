@@ -8,11 +8,12 @@
   },
   "version": "0.9.4",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern prettier.config.js .",
-    "test": "node_modules/.bin/mocha && npm run lint",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern prettier.config.js . && gts check",
+    "test": "mocha && npm run lint",
     "test-cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha && npm run lint",
-    "check": "gts check",
+    "check": "npm run lint",
     "fix": "gts fix"
   },
   "dependencies": {
