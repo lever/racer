@@ -17,6 +17,7 @@
     "fix": "gts fix"
   },
   "dependencies": {
+    "@types/sharedb": "^1.0.3",
     "arraydiff": "^0.1.1",
     "deep-is": "^0.1.3",
     "sharedb": "^1.0.0-beta",

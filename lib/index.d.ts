@@ -1,3 +1,5 @@
+import sharedb = require('sharedb');
+
 // If `racer` were written as an ES module, then it would have a default export
 // that's an instance of Racer, plus exports of module classes/types like Model.
 //
@@ -35,7 +37,7 @@ declare namespace racer {
   //     backend.js
   //
 
-  class RacerBackend {
+  class RacerBackend extends sharedb {
     createModel(options?: ModelOptions): RootModel;
   }
 
