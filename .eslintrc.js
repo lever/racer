@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     'block-scoped-var': 'off',
     'curly': ['error', 'multi-line', 'consistent'],
+    'comma-dangle': ['error', 'only-multiline'],
     'eqeqeq': ['error', 'allow-null'],
     'guard-for-in': 'off',
     'indent': ['error', 2, {SwitchCase: 1}],
